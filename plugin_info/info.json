@@ -1,0 +1,15 @@
+{
+	"id" : "dsc",
+	"name" : "Alarme DSC",
+	"description" : "Plugin permettant de récupérer les informations et évènements d'une alarme DSC. Nécessite une carte Envisalink qui sert d'interface IP entre Jeedom et la centrale DSC.",
+	"licence" : "AGPL",
+	"author" : "lunarok",
+	"require" : "2.4",
+	"category" : "security",
+  "hasDependency" : 1,
+  "hasOwnDeamon" : 1,
+	"language" : ["fr_FR","en_US"],
+	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile"],
+  "changelog" : "https://lunarok.github.io/jeedom_docs/plugins/dsc/changelog.html",
+  "documentation" : "https://lunarok.github.io/jeedom_docs/plugins/dsc/"
+}
