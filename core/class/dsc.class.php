@@ -296,9 +296,9 @@ class dsc extends eqLogic {
   return true;
 }
 
-public static function eventZone($id,$value) {
-  $logical = 'zone' . $id;
-  switch ($value) {
+public static function eventZone($data) {
+  $logical = 'zone' . $data['id'];
+  switch ($data['value']) {
     case '601':
     $cmd='alarm';
     $code='1';
@@ -340,14 +340,14 @@ public static function eventZone($id,$value) {
     break;
 
   }
-  log::add('dsc', 'info', 'Evènement sur zone : ' . $logical . ' commande : ' . $cmd . ' code : ' . $code . ' (' . $value . ')');
+  log::add('dsc', 'info', 'Evènement sur zone : ' . $logical . ' commande : ' . $cmd . ' code : ' . $code . ' (' . $data['value'] . ')');
   dsc::switchStatus($logical,$cmd,$code);
 }
 
-public static function eventPartition($id,$value) {
-  $logical = 'partition' . $id;
-  log::add('dsc', 'info', 'Evènement sur partition ' . $logical . ' de type ' . $value);
-  dsc::switchStatus($logical,'status',$value);
+public static function eventPartition($data) {
+  $logical = 'partition' . $data['id'];
+  log::add('dsc', 'info', 'Evènement sur partition ' . $logical . ' de type ' . $data['value']);
+  dsc::switchStatus($logical,'status',$data['value']);
   /*switch ($value) {
   case '650':
   $state='prête';

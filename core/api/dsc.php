@@ -22,14 +22,17 @@
  	die();
  }
 
- $messageType = init('messagetype');
- $id = init('id');
- $value = init('value');
- switch ($messageType) {
-   case 'zone' : dsc::eventZone($id,$value); break;
-   case 'partition' : dsc::eventPartition($id,$value); break;
+ $data['messageType'] = init('messageType');
+ $data['id'] =          init('id');
+ $data['value'] =       init('value');
+
+ switch ($data['messageType']) {
+   case 'zone' :      dsc::eventZone($data); 
+                      break;
+   case 'partition' : dsc::eventPartition($data); 
+                      break;
  }
- log::add('dsc', 'debug', 'Event ' . $messageType . ' id ' . $id . ' value ' . $value );
+ log::add('dsc', 'debug', 'Event ' . json_encode($data));
 
  return true;
 
