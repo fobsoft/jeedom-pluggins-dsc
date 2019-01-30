@@ -1,0 +1,6 @@
+[panel,danger]
+. I don't have any information going back
+--
+Il faut bien renseigner l'adresse de la carte Envaslink.
+--
+

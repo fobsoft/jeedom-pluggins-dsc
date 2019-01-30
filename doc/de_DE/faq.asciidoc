@@ -1,0 +1,5 @@
+[panel,primary]
+.Stützt sich das Plugin auf APIs Dritter ?
+--
+Non, le plugin appelle l'alarme DSC via la carte ethernet Evaslink.
+--

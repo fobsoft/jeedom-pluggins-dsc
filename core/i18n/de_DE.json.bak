@@ -1,0 +1,37 @@
+{
+    "plugins\/dsc\/plugin_info\/configuration.php": {
+        "Adresse IP de la carte Envisalink : ": "IP-Adresse der Envisalink Karte : ",
+        "Port TCP de la carte Envisalink : ": "TCP-Port der Envisalink Karte : ",
+        "Password de la carte Envisalink : ": "Passwort der Envisalink Karte : ",
+        "Nombre de Zones : ": "Anzahl der Zonen :",
+        "Nombre de Partitions : ": "Anzahl der Partitionen :"
+    },
+    "plugins\/dsc\/desktop\/php\/dsc.php": {
+        "Ajouter un équipement": "Gerät hinzufügen",
+        "Rechercher": "Suchen",
+        "Gestion": "Verwaltung",
+        "Configuration": "Konfiguration",
+        "Mes dsc": "Mein DSC",
+        "Sauvegarder": "Speichern",
+        "Supprimer": "Löschen",
+        "Configuration avancée": "Erweiterte Konfiguration",
+        "Equipement": "Gerät",
+        "Commandes": "Befehle",
+        "Lieu DSC": "DSC Standort",
+        "Nom de l'équipement dsc": "DSC Gerätename",
+        "Objet parent": "Elternobjekt",
+        "Aucun": "Keine",
+        "Catégorie": "Kategorie",
+        "Activer": "Aktivieren",
+        "Visible": "Sichtbar",
+        "Commentaire": "Kommentar",
+        "Paramètres": "Parameter",
+        "Nom": "Name",
+        "Valeur": "Wert"
+    },
+    "plugins\/dsc\/desktop\/js\/dsc.js": {
+        "Historiser": "Archivieren",
+        "Afficher": "Anzeigen",
+        "Tester": "Testen"
+    }
+}

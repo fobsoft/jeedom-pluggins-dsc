@@ -1,0 +1,12 @@
+==== Configuration du plugin
+
+Il faut fournir plusieurs paramètres :
+
+  - l'adresse de la carte Envaslink.
+
+  - le nombre de partition (habituellement 1)
+
+  - le nombre de zones
+
+
+Un équipement sera créer pour chaque zone, chaque partition et un pour le panel

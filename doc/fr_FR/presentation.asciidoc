@@ -1,0 +1,3 @@
+==== Alarme DSC, connexion via carte Evaslink
+
+Ce plugin permet d'obtenir l'état d'une alarme DSC

@@ -1,0 +1,3 @@
+==== DSC alarm, connection via Evaslink card
+
+This plugin allows to get the status of a DSC alarm

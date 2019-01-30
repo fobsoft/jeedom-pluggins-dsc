@@ -1,0 +1,22 @@
+== Description
+include::presentation.asciidoc[]
+
+'''
+== Configuration
+include::configuration.asciidoc[]
+
+'''
+== Ce que le plugin permet
+include::envisalink.asciidoc[]
+
+'''
+== FAQ
+include::faq.asciidoc[]
+
+'''
+== Troubleshoting
+include::troubleshoting.asciidoc[]
+
+'''
+== Changelog
+include::changelog.asciidoc[]
