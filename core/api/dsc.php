@@ -25,6 +25,7 @@
  $data['messageType'] = init('messageType');
  $data['id'] =          init('id');
  $data['value'] =       init('value');
+ $data['user'] =        init('user',null);
 
  switch ($data['messageType']) {
    case 'zone' :      dsc::eventZone($data); 

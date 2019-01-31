@@ -344,21 +344,34 @@ public static function eventZone($data) {
   dsc::switchStatus($logical,$cmd,$code);
 }
 
-public static function eventPartition($data) {
-  $logical = 'partition' . $data['id'];
-  log::add('dsc', 'info', 'Evènement sur partition ' . $logical . ' de type ' . $data['value']);
-  dsc::switchStatus($logical,'status',$data['value']);
-  /*switch ($value) {
-  case '650':
-  $state='prête';
-  break;
-}
-$dsc = self::byLogicalId($logical, 'dsc');
-$dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'state');
-$dscCmd->setConfiguration('value', $state );
-$dscCmd->save();
-$dscCmd->event($state);*/
-}
+  public static function eventPartition($data) {
+    $logical = 'partition' . $data['id'];
+    $userName =         '';
+    if (!isset($data['user'])) {
+      log::add('dsc', 'info', 'Evènement sur partition ' . $logical . ' de type ' . $data['value']);
+    }
+    else {
+      $userName = ' par '.config::byKey('user' . $data['user'], 'dsc');
+      
+      if ($userName == ' par ') {
+        $userName = ' par user' . $data['user'];
+      }
+      
+      log::add('dsc', 'info', 'Evènement sur partition ' . $logical . ' de type ' . $data['value'] . $userName);
+    }
+
+    dsc::switchStatus($logical,'status',$data['value']);
+    /*switch ($value) {
+      case '650':
+      $state='prête';
+      break;
+    }
+    $dsc = self::byLogicalId($logical, 'dsc');
+    $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'state');
+    $dscCmd->setConfiguration('value', $state );
+    $dscCmd->save();
+    $dscCmd->event($state);*/
+  }
 
 public static function switchStatus($id,$cmd,$value) {
   $dsc = self::byLogicalId($id, 'dsc');

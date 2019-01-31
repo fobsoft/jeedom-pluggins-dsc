@@ -64,6 +64,76 @@ if (!isConnect()) {
         </div>
       </div>
 
+      <div class="form-group">
+        <label class="col-lg-4 control-label">{{Master : }}</label>
+        <div class="col-lg-4">
+          <input id="manual_port" class="configKey form-control" data-l1key="user0040" style="margin-top:5px" placeholder="User 0040          "/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-4 control-label">{{User 0001 : }}</label>
+        <div class="col-lg-4">
+          <input id="manual_port" class="configKey form-control" data-l1key="user0001" style="margin-top:5px" placeholder="User 0001          "/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-4 control-label">{{User 0002 : }}</label>
+        <div class="col-lg-4">
+          <input id="manual_port" class="configKey form-control" data-l1key="user0002" style="margin-top:5px" placeholder="User 0002          "/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-4 control-label">{{User 0003 : }}</label>
+        <div class="col-lg-4">
+          <input id="manual_port" class="configKey form-control" data-l1key="user0003" style="margin-top:5px" placeholder="User 0003          "/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-4 control-label">{{User 0004 : }}</label>
+        <div class="col-lg-4">
+          <input id="manual_port" class="configKey form-control" data-l1key="user0004" style="margin-top:5px" placeholder="User 0004          "/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-4 control-label">{{User 0005 : }}</label>
+        <div class="col-lg-4">
+          <input id="manual_port" class="configKey form-control" data-l1key="user0005" style="margin-top:5px" placeholder="User 0005          "/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-4 control-label">{{User 0006 : }}</label>
+        <div class="col-lg-4">
+          <input id="manual_port" class="configKey form-control" data-l1key="user0006" style="margin-top:5px" placeholder="User 0006          "/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-4 control-label">{{User 0007 : }}</label>
+        <div class="col-lg-4">
+          <input id="manual_port" class="configKey form-control" data-l1key="user0007" style="margin-top:5px" placeholder="User 0007          "/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-4 control-label">{{User 0008 : }}</label>
+        <div class="col-lg-4">
+          <input id="manual_port" class="configKey form-control" data-l1key="user0008" style="margin-top:5px" placeholder="User 0008          "/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-4 control-label">{{User 0009 : }}</label>
+        <div class="col-lg-4">
+          <input id="manual_port" class="configKey form-control" data-l1key="user0009" style="margin-top:5px" placeholder="User 0009          "/>
+        </div>
+      </div>
+      
       <script>
 
 
