@@ -373,14 +373,22 @@ public static function eventZone($data) {
     $dscCmd->event($state);*/
   }
 
-public static function switchStatus($id,$cmd,$value) {
-  $dsc = self::byLogicalId($id, 'dsc');
-  $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),$cmd);
-  $dscCmd->setConfiguration('value', $value );
-  $dscCmd->save();
-  $dscCmd->event($value);
-  log::add('dsc', 'info', 'Changement de valeur de  ' . $id . ' pour ' . $value);
-}
+  public static function switchStatus($id,$cmd,$value) {
+    if (isset($cmd)) {
+      $dsc = self::byLogicalId($id, 'dsc');
+      $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),$cmd);
+
+      if ($dscCmd->getConfiguration() != $value) {
+        $dscCmd->setConfiguration('value', $value );
+        $dscCmd->save();
+        $dscCmd->event($value);
+        log::add('dsc', 'info', 'Changement de valeur de ' . $dsc -> getName() . '->'. $dscCmd -> getName() . ' pour ' . $value . ' ('.$lastEvent.')');
+      }
+      else {
+        log::add('dsc', 'info', 'Valeur de ' . $dsc -> getName() . ':'. $dscCmd -> getName() . ' deja a ' . $value);
+      }
+    }
+  }
 
 public static function sendCommand($id,$value) {
 
