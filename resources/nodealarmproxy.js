@@ -191,34 +191,86 @@ exports.initConfig = function(initconfig) {
     }
 	}
 
-	actual.on('data', function(data) {
-		var dataslice = data.toString().replace(/[\n\r]/g, ',').split(',');
+	function updatetrouble(tpi,data) {
+    var Intcode =     parseInt(data.substring(0,3));
+		var IntHexData =  parseInt(data.substring(3,5));
+    
+    console.log('updatetrouble => ','pre::',tpi.pre,'data::',data.substring(3,data.length-2),'post::',tpi.post,'(' + data + ')');
+    
+		for (var i = 0; i < 7; i++) {
+			var Bit = IntHexData & Math.pow(2,i);
+			if (Bit != 0 && typeof requestData !== "undefined") {
+        if (typeof alarmdata.trouble === "undefined" || alarmdata.trouble.code != i) {
+          alarmdata.trouble =  {'send':tpi.send,'name':tpi.name,'code':i};
+          requestData.addRequest({'messageType':'trouble','value':Intcode,'eventCode':i,'eventDesc':elink.tpitrouble[Intcode][i].desc});
+        }
+			}
+		}
+	}
+  
+  function coderequired(tpi,data) {
+    var Intcode =     parseInt(data.substring(0,3));
+    
+    console.log('updatesystem:',tpi.pre,tpi.post,'(' + data + ')');
+    
+    if (typeof alarmdata.system === "undefined" || alarmdata.system.code != data) {
+      alarmdata.system = {'send':tpi.send,'name':tpi.name,'code':data};
+      //if (typeof requestData !== "undefined") {
+        requestData.addRequest({'messageType':'system','value':Intcode,'eventDesc':tpi.pre + " " + tpi.post});
+      //}
+    }
+  }  
+  
+  function forward(tpi,data) {
+    var Intcode =     parseInt(data.substring(0,3));
 
+    console.log('updatesystem:',tpi.pre,tpi.post,'(' + data + ')');
+    
+    if (typeof alarmdata.system === "undefined" || alarmdata.system.code != data) {
+      alarmdata.system = {'send':tpi.send,'name':tpi.name,'code':data};
+      //if (typeof requestData !== "undefined") {
+        requestData.addRequest({'messageType':'system','value':Intcode,'eventDesc':tpi.pre + " " + tpi.post});
+      //}
+    }
+  }  
+
+	actual.on('data', function(data) {
+		dataString = data.toString().replace(/[\n\r]/g, ',');
+    dataString = dataString.replace(/,,/g, ',');
+    
+    var dataslice = dataString.split(',');
+    
 		for (var i = 0; i<dataslice.length; i++) {
 			var datapacket = dataslice[i];
 			if (datapacket !== '') {
 				var tpi = elink.tpicommands[datapacket.substring(0,3)];
 				if (tpi) {
-					if (tpi.bytes === '' || tpi.bytes === 0) {
-						console.log(tpi.pre,tpi.post);
-					} else {
-						console.log(tpi.pre,datapacket.substring(3,datapacket.length-2),tpi.post);
-						if (tpi.action === 'updatezone') {
-							updatezone(tpi,datapacket);
-						}
-						else if (tpi.action === 'updatepartition') {
-							updatepartition(tpi,datapacket);
-						}
-						else if (tpi.action === 'updatepartitionuser') {
-							updatepartitionuser(tpi,datapacket);
-						}
-						else if (tpi.action === 'updatesystem') {
-							updatepartitionuser(tpi,datapacket);
-						}
-						else if (tpi.action === 'loginresponse') {
-							loginresponse(datapacket);
-						}
+
+					if (tpi.action === 'updatezone') {
+						updatezone(tpi,datapacket);
 					}
+					else if (tpi.action === 'updatepartition') {
+						updatepartition(tpi,datapacket);
+					}
+					else if (tpi.action === 'updatepartitionuser') {
+						updatepartitionuser(tpi,datapacket);
+					}
+					else if (tpi.action === 'updatesystem') {
+            updatesystem(tpi,datapacket);
+					}
+          else if (tpi.action === 'updatetrouble') {
+            updatetrouble(tpi,datapacket);      
+          }
+          else if (tpi.action === 'coderequired') {
+            coderequired(tpi,datapacket);      
+          }
+          else if (tpi.action === 'forward') {
+            forward(tpi,datapacket);      
+          }
+					else if (tpi.action === 'loginresponse') {
+						loginresponse(datapacket);
+					}
+            
 					if (config.proxyenable) {
 						broadcastresponse(datapacket.substring(0,datapacket.length-2));
 					}

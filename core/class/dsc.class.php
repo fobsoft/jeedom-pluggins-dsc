@@ -682,7 +682,111 @@ class dsc extends eqLogic {
     }
 
     dsc::switchStatus($logical,'status',$data['value'],$data['eventDesc'], $notifyEvent);
+  }
 
+  public static function eventSystem($data) {
+    $systemLogicalId = dsc::getSourceSystemId();
+    $notifyEvent = true;
+    $cmd = null;
+    
+    switch ($data['value']) {
+      case '502':
+        break;
+      case '800':
+        $cmd = 'BatterieEtat';
+        $value = '1';
+        break;
+      case '801':
+        $cmd = 'BatterieEtat';
+        $value = '0';
+        break;
+      case '802':
+        $cmd = 'AlimentationSecondaire';
+        $value = '1';
+        $data['eventDesc'] = 'Alimentation du module de sécurité via l\'alimentation secondaire';
+        break;
+      case '803':
+        $cmd = 'AlimentationSecondaire';
+        $value = '0';
+        $data['eventDesc'] = 'Alimentation du module de sécurité via l\'alimentation principal';
+        break;
+      case '840':
+        $cmd = 'TroubleSysteme';
+        $value = '1';
+        break;
+      case '841':
+        $cmd = 'TroubleSysteme';
+        $value = '0';
+        
+        // Aucun lastEvent requis pour cette action
+        $data['eventDesc'] = null;
+        $notifyEvent = false;
+        
+        // Supression du message de trouble
+        dsc::switchStatus($systemLogicalId,'TroubleSource','');
+        
+        // Si la batterie etait sur allimentation secondaire
+        $dsc = self::byLogicalId($systemLogicalId, 'dsc');
+        $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc -> getId(),'AlimentationSecondaire');
+        if ($dscCmd -> getConfiguration('value') == 1) {
+          dsc::switchStatus($systemLogicalId,'AlimentationSecondaire','0','Alimentation du module de sécurité via l\'alimentation principal',1);
+        }
+        break;
+      default:
+        $cmd = null;
+        $data['eventDesc'] = null;
+        break;
+    }
+    
+    dsc::switchStatus($systemLogicalId,'status',$data['value'],$data['eventDesc'],$notifyEvent);
+    if (isset($cmd)) {
+      dsc::switchStatus($systemLogicalId,$cmd,$value);
+    }
+  }
+
+  public static function eventTrouble($data) {
+    $systemLogicalId = dsc::getSourceSystemId();
+
+    dsc::switchStatus($systemLogicalId,'status',$data['value']);
+
+    switch ($data['value']) {
+      case '849':
+        switch ($data['eventCode']) {
+          case 1:
+            $troubleSource = 'Perte de l\'alimentation principal';
+            dsc::switchStatus($systemLogicalId,'AlimentationSecondaire',1);
+            break;
+          case 2:
+            $troubleSource = 'Perte de la liaison téléphonique';
+            break;
+          case 3:
+            $troubleSource = 'Erreur lors de la communication avec la central';
+            break;
+          case 4: //Sensor/Zone Fault
+          case 5: //Sensor/Zone Tamper
+          case 6: //Sensor/Zone Low Battery
+          case 7: //Loff Of Time
+            $troubleSource = $data['eventDesc'];
+            break;
+          default:
+            $troubleSource = 'Source (' . $data['eventCode'] . ') non defini';
+            break;
+        }
+        break;
+      case '1000':
+        switch ($data['eventCode']) {
+          default:
+            $troubleSource =  'Erreur request jeedomdsc (' . $data['eventCode'] . ')';
+            break;
+        }
+        break;
+      default:
+        $troubleSource =  'Value ' . $data['value'] . ' non defini';
+        break;
+    }
+
+    dsc::switchStatus($systemLogicalId,'TroubleSysteme',1,$troubleSource);
+    dsc::switchStatus($systemLogicalId,'TroubleSource',$troubleSource);
   }
 
   public static function switchStatus($id,$cmd,$value,$lastEvent = null,$notifyEvent = 0) {

@@ -184,7 +184,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'forward'
   },
   '502' : {
     'name':'System Error',
@@ -192,7 +192,7 @@ exports.tpicommands = {
     'bytes':3,
     'post':'has been detected.',
     'send':'',
-    'action':''
+    'action':'forward'
   },
   '505' : {
     'name':'Login Interaction',
@@ -232,7 +232,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '561' : {
     'name':'Indoor Temperature Broadcast',
@@ -480,7 +480,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is in Progress',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '663' : {
     'name':'Chime Enabled',
@@ -488,7 +488,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is Enabled',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '664' : {
     'name':'Chime Disabled',
@@ -496,7 +496,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is Disabled',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '670' : {
     'name':'Invalid Access Code',
@@ -512,7 +512,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is not Available',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '672' : {
     'name':'Failure to Arm',
@@ -544,13 +544,13 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '700' : {
     'name':'User Closing',
-    'pre':'Partition has been armed by user:',
-    'bytes':5,
-    'post':'',
+    'pre':'Partition',
+    'bytes':1,
+    'post':'has been armed by user:',
     'send':'armed',
     'action':'updatepartitionuser'
   },
@@ -572,10 +572,10 @@ exports.tpicommands = {
   },
   '750' : {
     'name':'User Opening',
-    'pre':'Partition Opened by User:',
-    'bytes':5,
-    'post':'',
-    'send':'useropen',
+    'pre':'Partition',
+    'bytes':1,
+    'post':'has been disarmed by user:',
+    'send':'disarmed',
     'action':'updatepartitionuser'
   },
   '751' : {
@@ -592,7 +592,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '801' : {
     'name':'Panel Battery Trouble Restore',
@@ -600,7 +600,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '802' : {
     'name':'Panel AC Trouble',
@@ -608,7 +608,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '803' : {
     'name':'Panel AC Restored',
@@ -616,7 +616,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '806' : {
     'name':'System Bell Trouble',
@@ -624,7 +624,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '807' : {
     'name':'System Bell Trouble Restored',
@@ -632,7 +632,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '814' : {
     'name':'FTC Trouble',
@@ -640,7 +640,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '816' : {
     'name':'Buffer Near Full',
@@ -648,7 +648,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '829' : {
     'name':'General System Tamper',
@@ -672,7 +672,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is ON',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '841' : {
     'name':'Trouble LED Off',
@@ -680,7 +680,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is OFF',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '842' : {
     'name':'Fire Trouble Alarm',
@@ -688,7 +688,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '843' : {
     'name':'Fire Trouble Alarm Restored',
@@ -696,7 +696,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatesystem'
   },
   '849' : {
     'name':'Verbose Trouble Status',
@@ -704,7 +704,7 @@ exports.tpicommands = {
     'bytes':2,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatetrouble'
   },
   '900' : {
     'name':'Code Required',
@@ -737,5 +737,40 @@ exports.tpicommands = {
     'post':'',
     'send':'',
     'action':'coderequired'
+  }
+}
+exports.tpitrouble = {
+  '510' : {
+    '0': {'desc':'Ready LED'},
+    '1': {'desc':'Armed LED'},
+    '2': {'desc':'Memory LED'},
+    '3': {'desc':'Bypass LED'},
+    '4': {'desc':'Trouble LED'},
+    '5': {'desc':'Program LED'},
+    '6': {'desc':'Fire LED'},
+    '7': {'desc':'Backlight LED'}
+  },
+  '511' : {
+    '0': {'desc':'Ready LED'},
+    '1': {'desc':'Armed LED'},
+    '2': {'desc':'Memory LED'},
+    '3': {'desc':'Bypass LED'},
+    '4': {'desc':'Trouble LED'},
+    '5': {'desc':'Program LED'},
+    '6': {'desc':'Fire LED'},
+    '7': {'desc':'Backlight LED'}
+  },
+  '849' : {
+    '0': {'desc':'Service is Required'},
+    '1': {'desc':'AC Power Lost'},
+    '2': {'desc':'Telephone Line Fault'},
+    '3': {'desc':'Failure To Communicate'},
+    '4': {'desc':'Sensor/Zone Fault'},
+    '5': {'desc':'Sensor/Zone Tamper'},
+    '6': {'desc':'Sensor/Zone Low Battery'},
+    '7': {'desc':'Loff Of Time'}
+  },
+  '1000' : {
+    
   }
 }

@@ -26,12 +26,19 @@
  $data['id'] =          init('id');
  $data['value'] =       init('value');
  $data['user'] =        init('user',null);
+ $data['eventCode'] =   init('eventCode');
+ $data['eventDesc'] =   init('eventDesc');
 
  switch ($data['messageType']) {
    case 'zone' :      dsc::eventZone($data); 
                       break;
+    case 'partitionuser' :
    case 'partition' : dsc::eventPartition($data); 
                       break;
+    case 'system' :         dsc::eventSystem($data); 
+                            break;
+    case 'trouble' :        dsc::eventTrouble($data);
+                            break;
  }
  log::add('dsc', 'debug', 'Event ' . json_encode($data));
 
