@@ -115,6 +115,141 @@ class dsc extends eqLogic {
     $zone = config::byKey('zone', 'dsc');
     $partition = config::byKey('partition', 'dsc');
     if ($zone != '' || $partition != '') {
+      /********************HOME MAIN************************/
+      if ($partition > 1) {
+        $dsc = self::byLogicalId('system', 'dsc');
+        
+        if (!is_object($dsc)) {
+          log::add('dsc', 'info', 'Equipement n existe pas, création objet system');
+          $dsc = new dsc();
+          $dsc->setEqType_name('dsc');
+          $dsc->setLogicalId('system');
+          $dsc->setName('system');
+          $dsc->setIsEnable(true);
+          $dsc->save();
+        }
+      }
+      else {
+        $dsc = self::byLogicalId('partition'.$partition, 'dsc');
+        
+        if (!is_object($dsc)) {
+          log::add('dsc', 'info', 'Equipement n existe pas, création ' . $logical);
+          $dsc = new dsc();
+          $dsc->setEqType_name('dsc');
+          $dsc->setLogicalId($logical);
+          $dsc->setName('Partition ' . $partition);
+          $dsc->setIsEnable(true);
+          $dsc->save();
+        }
+      }
+      
+      $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'BatterieEtat');
+      if (!is_object($dscCmd)) {
+        $dscCmd = new dscCmd();
+        $dscCmd->setEqLogic_id($dsc->getId());
+        $dscCmd->setEqType('dsc');
+        $dscCmd->setIsHistorized(0);
+        $dscCmd->setName( 'Batterie Etat' );
+        $dscCmd->setType('info');
+        $dscCmd->setLogicalId('BatterieEtat');
+        $dscCmd->setSubType('binary');
+        $dscCmd->setIsVisible(0);
+        $dscCmd->setConfiguration('value', '0' );
+        $dscCmd->save();
+      }
+      $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'AlimentationSecondaire');
+      if (!is_object($dscCmd)) {
+        $dscCmd = new dscCmd();
+        $dscCmd->setEqLogic_id($dsc->getId());
+        $dscCmd->setEqType('dsc');
+        $dscCmd->setIsHistorized(0);
+        $dscCmd->setName( 'Alimentation Secondaire' );
+        $dscCmd->setType('info');
+        $dscCmd->setLogicalId('AlimentationSecondaire');
+        $dscCmd->setSubType('binary');
+        $dscCmd->setIsVisible(0);
+        $dscCmd->setConfiguration('value', '0' );
+        $dscCmd->save();
+      }
+      $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'panicfeu');
+      if (!is_object($dscCmd)) {
+        $dscCmd = new dscCmd();
+        $dscCmd->setEqLogic_id($dsc->getId());
+        $dscCmd->setEqType('dsc');
+        $dscCmd->setLogicalId('panicfeu');
+        $dscCmd->setName( 'Assistance Incendie' );
+        $dscCmd->setConfiguration('request', '0601');
+        $dscCmd->setType('action');
+        $dscCmd->setSubType('other');
+        $dscCmd->save();
+      }
+      $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'panicambulance');
+      if (!is_object($dscCmd)) {
+        $dscCmd = new dscCmd();
+        $dscCmd->setEqLogic_id($dsc->getId());
+        $dscCmd->setEqType('dsc');
+        $dscCmd->setLogicalId('panicambulance');
+        $dscCmd->setName( 'Assistance Medical' );
+        $dscCmd->setConfiguration('request', '0602');
+        $dscCmd->setType('action');
+        $dscCmd->setSubType('other');
+        $dscCmd->save();
+      }
+      $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'panicpolice');
+      if (!is_object($dscCmd)) {
+        $dscCmd = new dscCmd();
+        $dscCmd->setEqLogic_id($dsc->getId());
+        $dscCmd->setEqType('dsc');
+        $dscCmd->setLogicalId('panicpolice');
+        $dscCmd->setName( 'Assistance Policiere' );
+        $dscCmd->setConfiguration('request', '0603');
+        $dscCmd->setType('action');
+        $dscCmd->setSubType('other');
+        $dscCmd->save();
+      }
+      $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'lastevent');
+      if (!is_object($dscCmd)) {
+        $dscCmd = new dscCmd();
+        $dscCmd->setEqLogic_id($dsc->getId());
+        $dscCmd->setEqType('dsc');
+        $dscCmd->setName( 'Dernier evenement' );
+        $dscCmd->setIsVisible(0);
+        $dscCmd->setIsHistorized(0);
+        $dscCmd->setSubType('string');
+        $dscCmd->setLogicalId('lastevent');
+        $dscCmd->setType('info');
+        $dscCmd->save();
+      }
+      $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'notifyevent');
+      if (!is_object($dscCmd)) {
+        $dscCmd = new dscCmd();
+        $dscCmd->setEqLogic_id($dsc->getId());
+        $dscCmd->setEqType('dsc');
+        $dscCmd->setName( 'Notify evenement' );
+        $dscCmd->setIsVisible(0);
+        $dscCmd->setIsHistorized(0);
+        $dscCmd->setSubType('string');
+        $dscCmd->setLogicalId('notifyevent');
+        $dscCmd->setType('info');
+        $dscCmd->save();
+      }
+
+      $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'status');
+      if (!is_object($dscCmd)) {
+        $dscCmd = new dscCmd();
+        $dscCmd->setEqLogic_id($dsc->getId());
+        $dscCmd->setEqType('dsc');
+        $dscCmd->setName( 'Statut Alarme' );
+        $dscCmd->setIsVisible(0);
+        $dscCmd->setIsHistorized(0);
+        $dscCmd->setSubType('numeric');
+        $dscCmd->setLogicalId('status');
+        $dscCmd->setType('info');
+        $dscCmd->save();
+      }
+      
+      /********************HOME MAIN************************/
+
       $izone = 1;
       $ipart = 1;
       while ($izone <= $zone) {
@@ -288,65 +423,195 @@ class dsc extends eqLogic {
         $dscCmd->save();
       }
 
-      //incrémentation
-      $ipart++;
+        /********************HOME MAIN************************/
+        // 1 si l'alarme est declenche sinon 0
+        $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'AlarmeEtat');
+        if (!is_object($dscCmd)) {
+          $dscCmd = new dscCmd();
+          $dscCmd->setEqLogic_id($dsc->getId());
+          $dscCmd->setEqType('dsc');
+          $dscCmd->setName( 'Alarme Etat' );
+          $dscCmd->setIsVisible(0);
+          $dscCmd->setIsHistorized(0);
+          $dscCmd->setSubType('binary');
+          $dscCmd->setLogicalId('AlarmeEtat');
+          $dscCmd->setConfiguration('value', '0' );
+          $dscCmd->setTemplate("dashboard",'bell' );
+          $dscCmd->setTemplate("mobile",'bell' );
+          $dscCmd->setType('info');
+          $dscCmd->save();
+        }
+        
+        // Source du declenchement
+        $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'AlarmeSource');
+        if (!is_object($dscCmd)) {
+          $dscCmd = new dscCmd();
+          $dscCmd->setEqLogic_id($dsc->getId());
+          $dscCmd->setEqType('dsc');
+          $dscCmd->setName( 'Alarme Source' );
+          $dscCmd->setIsVisible(0);
+          $dscCmd->setIsHistorized(0);
+          $dscCmd->setSubType('string');
+          $dscCmd->setLogicalId('AlarmeSource');
+          $dscCmd->setType('info');
+          $dscCmd->save();
+        }
+        
+        $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'TroubleSysteme');
+        if (!is_object($dscCmd)) {
+          $dscCmd = new dscCmd();
+          $dscCmd->setEqLogic_id($dsc->getId());
+          $dscCmd->setEqType('dsc');
+          $dscCmd->setIsHistorized(0);
+          $dscCmd->setName( 'Trouble Systeme' );
+          $dscCmd->setType('info');
+          $dscCmd->setLogicalId('TroubleSysteme');
+          $dscCmd->setSubType('binary');
+          $dscCmd->setIsVisible(1);
+          $dscCmd->setConfiguration('value', '0' );
+          $dscCmd->setTemplate("dashboard",'bell' );
+          $dscCmd->setTemplate("mobile",'bell' );
+          $dscCmd->setDisplay('generic_type','OPENING');
+          $dscCmd->save();
+        }
+
+        $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'TroubleSource');
+        if (!is_object($dscCmd)) {
+          $dscCmd = new dscCmd();
+          $dscCmd->setEqLogic_id($dsc->getId());
+          $dscCmd->setEqType('dsc');
+          $dscCmd->setName( 'Trouble Source' );
+          $dscCmd->setIsVisible(0);
+          $dscCmd->setIsHistorized(0);
+          $dscCmd->setSubType('string');
+          $dscCmd->setLogicalId('TroubleSource');
+          $dscCmd->setType('info');
+          $dscCmd->save();
+        }
+        
+        $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'PGM1');
+        if (!is_object($dscCmd)) {
+          $dscCmd = new dscCmd();
+          $dscCmd->setEqLogic_id($dsc->getId());
+          $dscCmd->setEqType('dsc');
+          $dscCmd->setLogicalId('PGM1');
+          $dscCmd->setName( 'Activation PGM1' );
+          $dscCmd->setConfiguration('request', '020'.$ipart.'1');
+          $dscCmd->setType('action');
+          $dscCmd->setSubType('other');
+          $dscCmd->save();
+        }
+        
+        $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'PGM2');
+        if (!is_object($dscCmd)) {
+          $dscCmd = new dscCmd();
+          $dscCmd->setEqLogic_id($dsc->getId());
+          $dscCmd->setEqType('dsc');
+          $dscCmd->setLogicalId('PGM2');
+          $dscCmd->setName( 'Activation PGM2' );
+          $dscCmd->setConfiguration('request', '020'.$ipart.'2');
+          $dscCmd->setType('action');
+          $dscCmd->setSubType('other');
+          $dscCmd->save();
+        }
+        /********************HOME MAIN************************/
+        
+        //incrémentation
+        $ipart++;
+      }
+  
+    }
+    return true;
+  }
+
+  public static function eventZone($data) {
+    $logical = 'zone' . $data['id'];
+    switch ($data['value']) {
+      case '601':
+      $cmd='alarm';
+      $code='1';
+      break;
+
+      case '602':
+      $cmd='alarm';
+      $code='0';
+      break;
+
+      case '603':
+      $cmd='tamper';
+      $code='1';
+      break;
+
+      case '604':
+      $cmd='tamper';
+      $code='0';
+      break;
+
+      case '605':
+      $cmd='fault';
+      $code='1';
+      break;
+
+      case '606':
+      $cmd='fault';
+      $code='0';
+      break;
+
+      case '609':
+      $cmd='activity';
+      $code='1';
+      break;
+
+      case '610':
+      $cmd='activity';
+      $code='0';
+      break;
+      default:
+        $cmd =  null;
+        $code = null;
+      break;
     }
 
+    if ($code == 1) {
+      // Construction du lastEvent
+      $dsc =      self::byLogicalId($logical, 'dsc');
+      $object =	  $dsc -> getObject();
+      $dscCmd =   dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),$cmd);
+      
+      switch ($dscCmd -> getDisplay('generic_type')) {
+        case 'PRESENCE':
+        case 'MOTION':
+          $lastEvent =  'Détection volumétrique, ' . strtolower ($object -> getName());
+          break;
+        case 'OPENING':
+        case 'OPENING_WINDOW':
+          $lastEvent =  'Détection périmétrique, ' . strtolower ($dsc -> getName() . ' ' . $object -> getName());        
+          break;
+        case 'PANIQUE':
+          $lastEvent =  'Demande d\'assistance, ' . strtolower ($dsc -> getName() . ' ' . $object -> getName());        
+          break;
+        case 'SMOKE':
+          $lastEvent =  'Détection de fumer, ' . strtolower ($object -> getName());
+          break;
+        default:
+          $lastEvent =  'Détection ' . $dscCmd -> getDisplay('generic_type') . ', ' . strtolower ($object -> getName());
+          break;
+      }
+    }
+    else {
+      $lastEvent = null;
+    }
+
+    log::add('dsc', 'info', 'Evènement sur zone : ' . $logical . ' commande : ' . $cmd . ' code : ' . $code . ' (' . $data['value'] . ')');
+    dsc::switchStatus($logical,$cmd,$code,$lastEvent);
   }
-  return true;
-}
-
-public static function eventZone($data) {
-  $logical = 'zone' . $data['id'];
-  switch ($data['value']) {
-    case '601':
-    $cmd='alarm';
-    $code='1';
-    break;
-
-    case '602':
-    $cmd='alarm';
-    $code='0';
-    break;
-
-    case '603':
-    $cmd='tamper';
-    $code='1';
-    break;
-
-    case '604':
-    $cmd='tamper';
-    $code='0';
-    break;
-
-    case '605':
-    $cmd='fault';
-    $code='1';
-    break;
-
-    case '606':
-    $cmd='fault';
-    $code='0';
-    break;
-
-    case '609':
-    $cmd='activity';
-    $code='1';
-    break;
-
-    case '610':
-    $cmd='activity';
-    $code='0';
-    break;
-
-  }
-  log::add('dsc', 'info', 'Evènement sur zone : ' . $logical . ' commande : ' . $cmd . ' code : ' . $code . ' (' . $data['value'] . ')');
-  dsc::switchStatus($logical,$cmd,$code);
-}
 
   public static function eventPartition($data) {
+    $systemLogicalId =  dsc::getSourceSystemId();
     $logical = 'partition' . $data['id'];
     $userName =         '';
+    $notifyEvent =      false;
+
     if (!isset($data['user'])) {
       log::add('dsc', 'info', 'Evènement sur partition ' . $logical . ' de type ' . $data['value']);
     }
@@ -360,21 +625,78 @@ public static function eventZone($data) {
       log::add('dsc', 'info', 'Evènement sur partition ' . $logical . ' de type ' . $data['value'] . $userName);
     }
 
-    dsc::switchStatus($logical,'status',$data['value']);
-    /*switch ($value) {
+    switch ($data['value']) {
       case '650':
-      $state='prête';
-      break;
+        // Partition Ready
+        $data['eventDesc'] = null;
+      
+        // Si il y avait alarme, on reset la source de l'alarme
+        $dsc = self::byLogicalId($logical, 'dsc');
+        $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'AlarmeEtat');
+        if ($dscCmd->getConfiguration('value') == 1) {
+          dsc::switchStatus($logical,'AlarmeEtat','0');
+          dsc::switchStatus($logical,'AlarmeSource','');
+          dsc::switchStatus($systemLogicalId,'notifyEvent','');
+        }
+        break;                                      
+      case '651':
+        // Partition is NOT Ready
+        $data['eventDesc'] = null;
+        break;
+      case '652':
+        $data['eventDesc'] = null; //Activation de l\'arlarme complété';
+        break;
+      case '653':
+        // Partition is Ready and Force Arming is Enabled
+        $data['eventDesc'] = null;
+        break;
+      case '654':
+        dsc::switchStatus($logical,'AlarmeEtat','1');
+        $data['eventDesc'] = 'Veuillez rester sur placee';
+        $notifyEvent = true;
+        break;
+      case '655':
+        $data['eventDesc'] = 'Alarme désarmé';
+        break;
+      case '656':
+        $data['eventDesc'] = 'Activation de l\'arlarme en cour';
+        $notifyEvent = true;
+        break;
+      case '657':
+        dsc::switchStatus($logical,'AlarmeEtat','1');
+        $data['eventDesc'] = 'Vous avez 60 secondes pour désarmer le système, dans le cas contraire une assistance policière sera demandé.';
+        $notifyEvent = true;
+        break;
+      case '700':
+      case '701':
+        $data['eventDesc'] = 'Activation de l\'alarme complété' . $userName;
+        $notifyEvent = true;
+        break;
+      case '750':
+      case '751':
+        $data['eventDesc'] = 'Désactivation de l\'alarme complété' . $userName;
+        $notifyEvent = true;
+        dsc::switchStatus($logical,'AlarmeEtat','0');
+        dsc::switchStatus($logical,'AlarmeSource','');
+        break;
     }
-    $dsc = self::byLogicalId($logical, 'dsc');
-    $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),'state');
-    $dscCmd->setConfiguration('value', $state );
-    $dscCmd->save();
-    $dscCmd->event($state);*/
+
+    dsc::switchStatus($logical,'status',$data['value'],$data['eventDesc'], $notifyEvent);
+
   }
 
-  public static function switchStatus($id,$cmd,$value) {
+  public static function switchStatus($id,$cmd,$value,$lastEvent = null,$notifyEvent = 0) {
     if (isset($cmd)) {
+      // Set source alarm
+      if ($cmd == 'AlarmeEtat' && $value == 1) {
+        $systemLogicalId =  dsc::getSourceSystemId();
+
+        // Rechercher de la valeur de LastEvent pour obtenir la source de l'alarme
+        $systemDsc = self::byLogicalId($systemLogicalId, 'dsc');
+        $dscLastEventCmd = dscCmd::byEqLogicIdAndLogicalId($systemDsc->getId(),'lastevent');
+        dsc::switchStatus($id,'AlarmeSource',$dscLastEventCmd->getConfiguration('value'));
+      }
+      
       $dsc = self::byLogicalId($id, 'dsc');
       $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dsc->getId(),$cmd);
 
@@ -387,6 +709,39 @@ public static function eventZone($data) {
       else {
         log::add('dsc', 'info', 'Valeur de ' . $dsc -> getName() . ':'. $dscCmd -> getName() . ' deja a ' . $value);
       }
+    }
+    elseif (!isset($lastEvent)) {
+      log::add('dsc', 'info', 'Changement du lastEvent pour un code inconnue: ' . $value .' de '. $id);
+    }
+    
+    if (isset($lastEvent)) {
+      $dscSystemId = dsc::getSourceSystemId();
+      
+      $dscSystem = self::byLogicalId($dscSystemId, 'dsc');
+      $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dscSystem->getId(),'lastevent');
+      $dscCmd->setConfiguration('value', $lastEvent);
+      $dscCmd->save();
+      $dscCmd->event($lastEvent);
+      log::add('dsc', 'info', 'Changement du lastEvent pour: ' . $lastEvent);
+      
+      if ($notifyEvent) {
+        $dscCmd = dscCmd::byEqLogicIdAndLogicalId($dscSystem->getId(),'notifyevent');
+        $dscCmd->setConfiguration('value', $lastEvent);
+        $dscCmd->save();
+        $dscCmd->event($lastEvent);
+        log::add('dsc', 'info', 'Changement du notifyevent pour: ' . $lastEvent);
+      }
+    }
+  }
+
+  public static function getSourceSystemId() {
+    $partition = config::byKey('partition', 'dsc');
+
+    if ($partition > 1) {
+      return 'system';
+    }
+    else {
+      return 'partition1';
     }
   }
 
@@ -421,9 +776,7 @@ class dscCmd extends cmd {
       dsc::sendCommand($eqLogic->getLogicalId(),$this->getConfiguration('request'));
       return true;
     }
-
   }
-
 }
 
 ?>
