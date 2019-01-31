@@ -390,25 +390,23 @@ public static function eventZone($data) {
     }
   }
 
-public static function sendCommand($id,$value) {
+  public static function sendCommand($id,$value) {
+    log::add('dsc', 'info', 'Envoi commande ' . $value . ' pour ' . $id);
 
-  log::add('dsc', 'info', 'Envoi commande ' . $value . ' pour ' . $id);
+    $password = config::byKey('password', 'dsc');
+    $port = config::byKey('port', 'dsc');
+    $zone = config::byKey('zone', 'dsc');
+    $partition = config::byKey('partition', 'dsc');
+    log::add('dsc','debug','Récupération de la configuration : Host ' . $addr . ' Port ' . $port . ' Zones ' . $zone . ' Partitions ' . $partition);
 
-  $password = config::byKey('password', 'dsc');
-  $port = config::byKey('port', 'dsc');
-  $zone = config::byKey('zone', 'dsc');
-  $partition = config::byKey('partition', 'dsc');
-  log::add('dsc','debug','Récupération de la configuration : Host ' . $addr . ' Port ' . $port . ' Zones ' . $zone . ' Partitions ' . $partition);
+    $sensor_path = realpath(dirname(__FILE__) . '/../../resources');
+    $cmd = 'nice -n 19 nodejs ' . $sensor_path . '/jeedomcmd.js ' . $password . ' ' . $port . ' ' . $zone . ' ' . $partition . ' ' . $value;
 
-  $sensor_path = realpath(dirname(__FILE__) . '/../../resources');
-  $cmd = 'nice -n 19 nodejs ' . $sensor_path . '/jeedomcmd.js ' . $password . ' ' . $port . ' ' . $zone . ' ' . $partition . ' ' . $value;
+    log::add('dsc', 'debug', 'Lancement commande : ' . $cmd);
 
-  log::add('dsc', 'debug', 'Lancement commande : ' . $cmd);
+     $result = exec($cmd . ' >> ' . log::getPathToLog('dsc_command') . ' 2>&1 &');
 
-  $result = exec($cmd . ' >> ' . log::getPathToLog('dsc_command') . ' 2>&1 &');
-
-}
-
+  }
 }
 
 class dscCmd extends cmd {
