@@ -1,3 +1,84 @@
+// Fonction pour le pool de request, pour s'assurer de la transmission dans l'ordre de reception
+requestData = {
+  called: false,
+  length: 0,
+
+  addRequest: function addRequest (data) {
+    // Creation de l'url de la request
+    data.smartURL = this.createUrlRequest(data);
+    
+    // Ajout d'un compteur de tentative
+    data.tryProcessingNumber = 1;
+    
+    // Ajout de l'object a la liste d'envoi
+    [].push.call(this, data);
+    
+    // Appel de la function d'envoi
+    this.execRequest();
+  },
+
+  createUrlRequest: function createUrlRequest (data) {
+    return urlJeedom + "&type=dsc&" + Object.keys(data).map(function(key){ 
+      return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]); 
+    }).join('&');
+  },
+  
+  removeRequest: function removeRequest () {
+    [].shift.call(this);
+  },
+
+  execRequest: function sendRequest () {
+    // On bloque un double appel, puisque celle-ci ce rappel tant qu'il y a quelque chose dans le pool
+    if (!this.called) {
+      this.called = true;
+      this.sendNextRequest();
+    }
+  },
+  
+  sendNextRequest: function sendNextRequest () {
+    if (this.length > 0) {
+      console.log('sendRequestHttpUrl:',this[0].smartURL);
+      
+      request(this[0].smartURL, function (error, response, body) {
+        if (error || response.statusCode != 200) {
+          if (typeof response.statusCode !== "undefined") {
+            console.log('Erreur requestHttp::',response.statusCode,' - ',requestData[0].smartURL);
+          }
+          else {
+            console.log('Erreur requestHttp::','Code undefined',' - ',requestData[0].smartURL);
+          }
+          requestData[0].tryProcessingNumber += 1;
+          
+          // Si 10 tantative echoue
+          if (requestData[0].tryProcessingNumber >= 10) {
+            // Si c'est un type trouble de communication de jeedom on passe a la prochaine
+            if (requestData[0].messagetype == "trouble" && requestData[0].value == 1000) {
+              requestData.removeRequest();
+            }
+            // Sinon on remplace la resquest courrante par un type trouble de communication associe a jeedom
+            else {
+              // Creation de l'url de la request
+              requestData[0].smartURL = requestData.createUrlRequest({'messagetype':'trouble','value':1000,'troublecode':response.statusCode});
+              
+              // Reset du compteur de tentative
+              requestData[0].tryProcessingNumber = 1;
+            }
+          }
+        }
+        // Si aucune erreur on efface la request pour passer a la suivante
+        else {
+          requestData.removeRequest();
+        }
+        // On rappel la fonction
+        requestData.sendNextRequest();
+      });
+    }
+    else {
+      this.called = false;
+    }
+  }
+};
+
 var nap = require('./nodealarmproxy.js');
 
 var urlJeedom = '';
@@ -43,38 +124,4 @@ var watchevents = ['601','602','603','604','605','606','609','610','650','620','
 
 alarm.on('data', function(data) {
 	console.log('npmtest data:',data);
-});
-
-alarm.on('zoneupdate', function(data) {
-	console.log('npmtest zoneupdate:',data);
-	if (watchevents.indexOf(data.code) != -1) {
-		var smartURL = urlJeedom + "&type=dsc&messagetype=zone&id="+data.zone+"&value="+data.code;
-		console.log('smartURL:',smartURL);
-		request(smartURL, function (error, response, body) {
-	if (!error && response.statusCode == 200) {
-	console.log('npmtest systemupdate:',response.statusCode);
-	}
-});
-	}
-});
-
-alarm.on('partitionupdate', function(data) {
-	console.log('npmtest partitionupdate:',data);
-	if (watchevents.indexOf(data.code) != -1) {
-		var smartURL = urlJeedom + "&type=dsc&messagetype=partition&id="+data.partition+"&value="+data.code;
-		console.log('smartURL:',smartURL);
-		request(smartURL, function (error, response, body) {
-	if (!error && response.statusCode == 200) {
-	console.log('npmtest systemupdate:',response.statusCode);
-	}
-});
-	}
-});
-
-alarm.on('partitionuserupdate', function(data) {
-	console.log('npmtest partitionuserupdate:',data);
-});
-
-alarm.on('systemupdate', function(data) {
-	console.log('npmtest systemupdate:',data);
 });
