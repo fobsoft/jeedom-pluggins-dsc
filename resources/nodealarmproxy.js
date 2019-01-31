@@ -1,3 +1,20 @@
+// Override de la fonction console.log
+(function() {
+  if (console.log) {
+    var old = console.log;
+    console.log = function() {
+      function pad(s) {
+        return (s<10)?'0'+s:s;
+      }
+      
+      date = new Date();
+      dateStr = [date.getFullYear(), pad(date.getMonth()+1),pad(date.getDate())].join('-') + ' ' + [pad(date.getHours()), pad(date.getMinutes()), pad(date.getSeconds())].join(':');
+      Array.prototype.unshift.call(arguments, '[' + dateStr + ']' + '[NODE]');
+      old.apply(this, arguments)
+    }
+  }  
+})();
+
 var net = require('net');
 var elink = require('./envisalink.js');
 var events = require('events');
